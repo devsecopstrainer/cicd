@@ -3,9 +3,9 @@ pipeline {
         label 'microservice'
     }
     stages {
-        stage('Hello') {
+        stage('git-checkout') {
             steps {
-                echo 'Hello World from github'
+                git branch: 'main', url: 'https://github.com/devsecopstrainer/student-service.git'
             }
         }
     }

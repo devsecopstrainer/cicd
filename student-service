@@ -8,5 +8,10 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/devsecopstrainer/student-service.git'
             }
         }
+        stage('mvn-build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
     }
 }

@@ -15,11 +15,7 @@ pipeline {
         }
         stage('sonar-scan') {
             steps {
-                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-  -Dsonar.projectKey=student-service \
-  -Dsonar.projectName='student-service' \
-  -Dsonar.host.url=http://3.108.40.252:9000 \
-  -Dsonar.token=sqp_063d5d1e1be7320cd7bbd35ae5f64fb7c522fdbd"
+                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=student-service -Dsonar.projectName='student-service'
             }
         }
         stage('upload-to-nexus') {

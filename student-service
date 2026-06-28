@@ -13,11 +13,13 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-        stage('sonar-scan') {
-            steps {
-                sh 'mvn clean install sonar:sonar'
-            }
+stage('SonarQube Analysis') {
+    steps {
+        withSonarQubeEnv('SonarServer') {
+            sh 'mvn sonar:sonar -Dsonar.projectKey=student-service'
         }
+    }
+}
         stage('upload-to-nexus') {
             steps {
                 sh 'mvn deploy'

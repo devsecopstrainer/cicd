@@ -15,7 +15,7 @@ pipeline {
         }
         stage('sonar-scan') {
             steps {
-                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=student-service -Dsonar.projectName='student-service'"
+                sh 'mvn clean install sonar:sonar'
             }
         }
         stage('upload-to-nexus') {

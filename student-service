@@ -5,22 +5,27 @@ pipeline {
     stages {
         stage('git-checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/devsecopstrainer/student-service.git'
-            }
+				dir('git-repo') {
+					git branch: 'main', url: 'https://github.com/devsecopstrainer/student-service.git'
+				}
+			}
         }
         stage('mvn-build') {
             steps {
-                sh 'mvn clean package'
+				dir('git-repo') {
+					sh 'mvn clean package'
+				}
             }
         }
-stage('SonarQube Analysis') {
-    steps {
-        withSonarQubeEnv('SonarServer') {
-            sh 'mvn sonar:sonar -Dsonar.projectKey=student-service'
-        }
-    }
-}
-
+		stage('SonarQube Analysis') {
+			steps {
+				dir('git-repo') {
+					withSonarQubeEnv('SonarServer') {
+						sh 'mvn sonar:sonar -Dsonar.projectKey=student-service'
+					}
+				}
+			}
+		}
         stage('Quality Gate') {
             steps {
                 timeout(time: 3, unit: 'MINUTES') {
@@ -28,10 +33,21 @@ stage('SonarQube Analysis') {
                 }
             }
         }
-
         stage('upload-to-nexus') {
             steps {
                 sh 'mvn deploy'
+            }
+        }
+        stage('Checkout Dockerfile') {
+            steps {
+                dir('docker-repo') {
+                    git branch: 'main', url: 'https://github.com/devsecopstrainer/cicd.git'
+                }
+            }
+        }
+        stage('Docker build') {
+            steps {
+               sh 'docker build -f docker-repo/student-service-Dockerfile -t student-svc:${BUILD_NUMBER} .'
             }
         }
     }

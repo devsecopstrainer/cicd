@@ -34,8 +34,8 @@ pipeline {
             }
         }
         stage('upload-to-nexus') {
-			dir('git-repo') {
-            	steps {
+			steps {
+				dir('git-repo') {
                 	sh 'mvn deploy'
             	}
 			}

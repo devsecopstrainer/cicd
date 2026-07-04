@@ -3,7 +3,7 @@ pipeline {
         label 'microservice'
     }
     stages {
-        stage('git-checkout') {
+        stage('git-clone') {
             steps {
 				dir('git-repo') {
 					git branch: 'main', url: 'https://github.com/devsecopstrainer/student-service.git'
@@ -35,7 +35,7 @@ pipeline {
         }
         stage('upload-to-nexus') {
             steps {
-                sh 'mvn deploy'
+                sh 'mvn deploy -DskipTests'
             }
         }
         stage('Checkout Dockerfile') {
@@ -48,6 +48,33 @@ pipeline {
         stage('Docker build') {
             steps {
                sh 'docker build -f docker-repo/student-service-Dockerfile -t student-svc:${BUILD_NUMBER} .'
+            }
+        }
+        stage('Trivy Scan') {
+            steps {
+				sh '''
+					export TMPDIR=/data/trivy-tmp
+					sudo mkdir -p $TMPDIR
+					sudo mkdir -p /data/trivy-cache
+					sudo chown -R $(whoami):$(whoami) /data/trivy-cache /data/trivy-tmp
+					#trivy image --scanners vuln --severity HIGH,CRITICAL --exit-code 1 --cache-dir /data/trivy-cache student-svc:${BUILD_NUMBER}
+					trivy image --scanners vuln --severity HIGH,CRITICAL --cache-dir /data/trivy-cache student-svc:${BUILD_NUMBER}
+				''' 
+			   }
+        }		
+        stage('ECR Login') {
+            steps {
+               sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 834362069350.dkr.ecr.ap-south-1.amazonaws.com'
+            }
+        }
+        stage('Tag Image') {
+            steps {
+               sh 'docker tag student-svc:${BUILD_NUMBER} 834362069350.dkr.ecr.ap-south-1.amazonaws.com/user-service:${BUILD_NUMBER}'
+            }
+        }
+        stage('Push Image To ECR') {
+            steps {
+               sh 'docker push 834362069350.dkr.ecr.ap-south-1.amazonaws.com/user-service:${BUILD_NUMBER}'
             }
         }
     }

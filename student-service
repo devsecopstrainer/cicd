@@ -71,7 +71,7 @@ pipeline {
         }
         stage('Tag Image') {
             steps {
-               sh 'docker tag student-svc:${BUILD_NUMBER} 834362069350.dkr.ecr.ap-south-1.amazonaws.com/student-service/student-svc:${BUILD_NUMBER}'
+               sh 'docker tag student-svc:${BUILD_NUMBER} 834362069350.dkr.ecr.ap-south-1.amazonaws.com/student-service/student-service:${BUILD_NUMBER}'
             }
         }
         stage('Push Image To ECR') {

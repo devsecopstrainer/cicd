@@ -21,7 +21,7 @@ pipeline {
 			steps {
 				dir('git-repo') {
 					withSonarQubeEnv('SonarServer') {
-					//	sh 'mvn sonar:sonar -Dsonar.projectKey=student-service'
+						sh 'mvn sonar:sonar -Dsonar.projectKey=student-service'
 					}
 				}
 			}

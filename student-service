@@ -63,7 +63,7 @@ pipeline {
 					sudo mkdir -p $TMPDIR
 					sudo mkdir -p /data/trivy-cache
 					sudo chown -R $(whoami):$(whoami) /data/trivy-cache /data/trivy-tmp
-					#trivy image --scanners vuln --severity HIGH,CRITICAL --exit-code 1 --cache-dir /data/trivy-cache student-svc:${BUILD_NUMBER}
+					trivy image --scanners vuln --severity HIGH,CRITICAL --exit-code 1 --cache-dir /data/trivy-cache student-svc:${BUILD_NUMBER}
 					#trivy image --scanners vuln --severity HIGH,CRITICAL --cache-dir /data/trivy-cache student-svc:${BUILD_NUMBER}
 				''' 
 			   }

@@ -13,7 +13,7 @@ pipeline {
         stage('mvn-build') {
             steps {
 				dir('git-repo') {
-					//sh 'mvn clean package'
+					sh 'mvn clean package'
 				}
             }
         }

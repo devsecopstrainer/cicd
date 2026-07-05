@@ -13,7 +13,7 @@ pipeline {
         stage('mvn-build') {
             steps {
 				dir('git-repo') {
-					sh 'mvn clean package'
+					//sh 'mvn clean package'
 				}
             }
         }
@@ -43,7 +43,7 @@ pipeline {
         stage('Checkout Dockerfile') {
             steps {
                 dir('docker-repo') {
-                    git branch: 'main', url: 'https://github.com/devsecopstrainer/cicd.git'
+                   // git branch: 'main', url: 'https://github.com/devsecopstrainer/cicd.git'
                 }
             }
         }
@@ -66,17 +66,17 @@ pipeline {
         }		
         stage('ECR Login') {
             steps {
-               sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 834362069350.dkr.ecr.ap-south-1.amazonaws.com'
+              // sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 834362069350.dkr.ecr.ap-south-1.amazonaws.com'
             }
         }
         stage('Tag Image') {
             steps {
-               sh 'docker tag student-svc:${BUILD_NUMBER} 834362069350.dkr.ecr.ap-south-1.amazonaws.com/student-service:${BUILD_NUMBER}'
+             //  sh 'docker tag student-svc:${BUILD_NUMBER} 834362069350.dkr.ecr.ap-south-1.amazonaws.com/student-service:${BUILD_NUMBER}'
             }
         }
         stage('Push Image To ECR') {
             steps {
-               sh 'docker push 834362069350.dkr.ecr.ap-south-1.amazonaws.com/student-service:${BUILD_NUMBER}'
+              // sh 'docker push 834362069350.dkr.ecr.ap-south-1.amazonaws.com/student-service:${BUILD_NUMBER}'
             }
         }
     }

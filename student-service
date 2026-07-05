@@ -71,19 +71,19 @@ pipeline {
         stage('ECR Login') {
             steps {
 				sh 'echo "success"'
-              // sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 834362069350.dkr.ecr.ap-south-1.amazonaws.com'
+               sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 834362069350.dkr.ecr.ap-south-1.amazonaws.com'
             }
         }
         stage('Tag Image') {
             steps {
 			sh 'echo "success"'
-             //  sh 'docker tag student-svc:${BUILD_NUMBER} 834362069350.dkr.ecr.ap-south-1.amazonaws.com/student-service:${BUILD_NUMBER}'
+              sh 'docker tag student-service:${BUILD_NUMBER} 834362069350.dkr.ecr.ap-south-1.amazonaws.com/student-service:${BUILD_NUMBER}'
             }
         }
         stage('Push Image To ECR') {
             steps {
 			sh 'echo "success"'
-              // sh 'docker push 834362069350.dkr.ecr.ap-south-1.amazonaws.com/student-service:${BUILD_NUMBER}'
+              sh 'docker push 834362069350.dkr.ecr.ap-south-1.amazonaws.com/student-service:${BUILD_NUMBER}'
             }
         }
     }

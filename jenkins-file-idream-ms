@@ -1,0 +1,32 @@
+pipeline {
+    agent {
+        label 'ms'
+    }
+    stages {
+        stage('git-clone') {
+            steps {
+				git branch: 'main', url: 'https://github.com/devsecopstrainer/idream-ms.git'
+			}
+        }
+        stage('mvn-build') {
+            steps {
+				sh 'mvn clean package'
+            }
+        }
+        stage('Docker-Img') {
+            steps {
+				sh 'docker build -t devsecopstrainer/idream-ms:${BUILD_NUMBER} .'
+            }
+        }
+        stage('Push Image To DockerHub') {
+            steps {
+              sh 'docker push devsecopstrainer/idream-ms:${BUILD_NUMBER}'
+            }
+        }
+        stage('Deploy-On-K8S') {
+            steps {
+                sh 'kubectl apply -f deployment.yml'
+            }
+        }
+    }
+}

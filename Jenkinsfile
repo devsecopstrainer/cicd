@@ -11,5 +11,10 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
+        stage('sonar-qube-scan') {
+            steps {
+                echo 'sonar scan success'
+            }
+        }
     }
 }

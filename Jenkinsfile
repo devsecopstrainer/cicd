@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        SCANNER_HOME = tool 'SonarServer'   // must match the name in Tools config
+    }
     stages {
         stage('git-clone') {
             steps {

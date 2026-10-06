@@ -14,7 +14,13 @@ pipeline {
         stage('sonar-qube-scan') {
             steps {
 withSonarQubeEnv('SonarServer') {
- sh 'mvn sonar:sonar -Dsonar.projectKey=idream-ms'
+sh """
+                        ${SCANNER_HOME}/bin/sonar-scanner \
+                        -Dsonar.projectKey=idream-ms \
+                        -Dsonar.projectName="idream-ms" \
+                        -Dsonar.sources=src \
+                        -Dsonar.java.binaries=target/classes
+                    """
 }
             }
         }

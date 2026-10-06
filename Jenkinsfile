@@ -16,15 +16,22 @@ pipeline {
         }
         stage('sonar-qube-scan') {
             steps {
-withSonarQubeEnv('SonarServer') {
-sh """
-    ${SCANNER_HOME}/bin/sonar-scanner \\
-    -Dsonar.projectKey=idream-ms \\
-    -Dsonar.projectName=idream-ms \\
-    -Dsonar.sources=src \\
-    -Dsonar.java.binaries=target/classes
-"""
-}
+					withSonarQubeEnv('SonarServer') {
+					sh """
+						${SCANNER_HOME}/bin/sonar-scanner \\
+						-Dsonar.projectKey=idream-ms \\
+						-Dsonar.projectName=idream-ms \\
+						-Dsonar.sources=src \\
+						-Dsonar.java.binaries=target/classes
+					"""
+					}
+            }
+        }
+        stage('quality gate') {
+            steps {
+				timeout(time: 3, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }                
             }
         }
     }

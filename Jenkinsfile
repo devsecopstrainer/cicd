@@ -17,9 +17,7 @@ withSonarQubeEnv('SonarServer') {
 sh """
                         ${SCANNER_HOME}/bin/sonar-scanner \
                         -Dsonar.projectKey=idream-ms \
-                        -Dsonar.projectName="idream-ms" \
-                        -Dsonar.sources=src \
-                        -Dsonar.java.binaries=target/classes
+                        -Dsonar.projectName="idream-ms"
                     """
 }
             }
